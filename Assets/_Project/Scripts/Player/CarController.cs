@@ -33,40 +33,26 @@ public class CarController : MonoBehaviour
     void Start()
     {
         theRB.transform.parent = null;                 // Separamos el Rigidbody del padre para que rote libremente
-        dragOnGround = theRB.linearDamping;                     // Guardamos el valor de fricción original
+        dragOnGround = theRB.linearDamping;            // Guardamos el valor de fricción original
     }
 
     void Update()
     {
-        speedInput = 0f;
-
-        /*   PARAR PARA VERIFICAR DONDE ESTA MI ERROR NO ME ESTA LEYENDO LAS TECLAS ...
-        // Entrada de aceleración hacia adelante o hacia atrás
+        // Entrada de aceleración hacia adelante o hacia atrás (W/S o ↑/↓)
         float verticalInput = Input.GetAxis("Vertical");
-        if (verticalInput > 0)
-        {
+
+        if (verticalInput > 0f)
             speedInput = verticalInput * forwardAccel;
-        }
-        else if (verticalInput < 0)
-        {
+        else if (verticalInput < 0f)
             speedInput = verticalInput * reverseAccel;
-        }
+        else
+            speedInput = 0f;
 
-        // Entrada de giro izquierda/derecha
+        // Entrada de giro izquierda/derecha (A/D o ←/→)
         turnInput = Input.GetAxis("Horizontal");
-        */
-        
-        // PRUEBA TEMPORAL DE INPUT CON TECLAS
-        if (Input.GetKey(KeyCode.W)) speedInput = forwardAccel;
-        else if (Input.GetKey(KeyCode.S)) speedInput = -reverseAccel;
-        else speedInput = 0f; // Sin tecla presionada = sin movimiento
 
-        turnInput = 0f;
-        if (Input.GetKey(KeyCode.A)) turnInput = -1f;
-        else if (Input.GetKey(KeyCode.D)) turnInput = 1f;
-
-        Debug.Log("Vertical: " + Input.GetAxis("Vertical"));
-        Debug.Log("Horizontal: " + Input.GetAxis("Horizontal"));
+        Debug.Log("Vertical: " + verticalInput);
+        Debug.Log("Horizontal: " + turnInput);
 
         // Rotación visual de ruedas delanteras
         if (leftFrontWheel != null)
@@ -116,7 +102,6 @@ public class CarController : MonoBehaviour
         if (grounded)
         {
             theRB.linearDamping = dragOnGround;
-            //theRB.AddForce(transform.forward * speedInput * 1000f);
             theRB.AddForce(transform.right * speedInput * 1000f);
         }
         else
@@ -146,4 +131,3 @@ public class CarController : MonoBehaviour
         Debug.Log("Velocity: " + theRB.linearVelocity.magnitude);
     }
 }
-
