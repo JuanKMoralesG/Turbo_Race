@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 /// <summary>
 /// Controlador principal para el vehículo del jugador.
 /// Administra movimiento, aceleración, giro, detección de suelo y físicas.
 /// </summary>
-
 public class CarController : MonoBehaviour
 {
     // --- COMPONENTES Y AJUSTES PRINCIPALES ---
@@ -30,42 +28,52 @@ public class CarController : MonoBehaviour
 
     // --- CONTROL VISUAL DE RUEDAS DELANTERAS ---
     public Transform leftFrontWheel, rightFrontWheel; // Ruedas delanteras para rotación visual
-    public float maxWheelTurn = 25f;                   // Ángulo visual máximo de giro de ruedas
+    public float maxWheelTurn = 25f;                  // Ángulo visual máximo de giro de ruedas
 
     void Start()
     {
-        // Separamos el Rigidbody del padre para que rote libremente
-        theRB.transform.parent = null;
-
-        // Guardamos el valor de damping original (fricción)
-        dragOnGround = theRB.linearDamping;
+        theRB.transform.parent = null;                 // Separamos el Rigidbody del padre para que rote libremente
+        dragOnGround = theRB.linearDamping;                     // Guardamos el valor de fricción original
     }
 
     void Update()
     {
         speedInput = 0f;
 
-        // Entrada de aceleración hacia adelante
-        if (Input.GetAxis("Vertical") > 0)
+        /*   PARAR PARA VERIFICAR DONDE ESTA MI ERROR NO ME ESTA LEYENDO LAS TECLAS ...
+        // Entrada de aceleración hacia adelante o hacia atrás
+        float verticalInput = Input.GetAxis("Vertical");
+        if (verticalInput > 0)
         {
-            speedInput = Input.GetAxis("Vertical") * forwardAccel;
+            speedInput = verticalInput * forwardAccel;
+        }
+        else if (verticalInput < 0)
+        {
+            speedInput = verticalInput * reverseAccel;
         }
 
-        // Entrada de retroceso
-        else if (Input.GetAxis("Vertical") < 0)
-        {
-            speedInput = Input.GetAxis("Vertical") * reverseAccel;
-        }
-
-        // Entrada de giro
+        // Entrada de giro izquierda/derecha
         turnInput = Input.GetAxis("Horizontal");
+        */
+        
+        // PRUEBA TEMPORAL DE INPUT CON TECLAS
+        if (Input.GetKey(KeyCode.W)) speedInput = forwardAccel;
+        else if (Input.GetKey(KeyCode.S)) speedInput = -reverseAccel;
+        else speedInput = 0f; // Sin tecla presionada = sin movimiento
+
+        turnInput = 0f;
+        if (Input.GetKey(KeyCode.A)) turnInput = -1f;
+        else if (Input.GetKey(KeyCode.D)) turnInput = 1f;
+
+        Debug.Log("Vertical: " + Input.GetAxis("Vertical"));
+        Debug.Log("Horizontal: " + Input.GetAxis("Horizontal"));
 
         // Rotación visual de ruedas delanteras
         if (leftFrontWheel != null)
         {
             leftFrontWheel.localRotation = Quaternion.Euler(
                 leftFrontWheel.localRotation.eulerAngles.x,
-                (turnInput * maxWheelTurn) - 180,
+                (turnInput * maxWheelTurn) - 180f,
                 leftFrontWheel.localRotation.eulerAngles.z);
         }
 
@@ -84,31 +92,32 @@ public class CarController : MonoBehaviour
         RaycastHit hit;
         Vector3 normalTarget = Vector3.zero;
 
-        // Raycast 1
+        // Primer Raycast
         if (Physics.Raycast(groundRayPoint.position, -transform.up, out hit, groundRayLength, whatIsGround))
         {
             grounded = true;
             normalTarget = hit.normal;
         }
 
-        // Raycast 2
+        // Segundo Raycast
         if (Physics.Raycast(groundRayPoint2.position, -transform.up, out hit, groundRayLength, whatIsGround))
         {
             grounded = true;
             normalTarget = (normalTarget + hit.normal) / 2f;
         }
 
-        // Alinea el coche con el terreno
+        // Alinea el coche con la pendiente del terreno
         if (grounded)
         {
             transform.rotation = Quaternion.FromToRotation(transform.up, normalTarget) * transform.rotation;
         }
 
-        // Aplicación de fuerzas
+        // Movimiento del coche
         if (grounded)
         {
             theRB.linearDamping = dragOnGround;
-            theRB.AddForce(transform.forward * speedInput * 1000f);
+            //theRB.AddForce(transform.forward * speedInput * 1000f);
+            theRB.AddForce(transform.right * speedInput * 1000f);
         }
         else
         {
@@ -116,7 +125,7 @@ public class CarController : MonoBehaviour
             theRB.AddForce(-Vector3.up * gravityMod * 100f);
         }
 
-        // Limitar velocidad máxima
+        // Limita la velocidad máxima
         if (theRB.linearVelocity.magnitude > maxSpeed)
         {
             theRB.linearVelocity = theRB.linearVelocity.normalized * maxSpeed;
@@ -125,12 +134,16 @@ public class CarController : MonoBehaviour
         // Mueve visualmente el coche con el Rigidbody
         transform.position = theRB.position;
 
-        // Gira el coche si está acelerando
-        if (grounded && speedInput != 0)
+        // Rotación en curva si se está moviendo
+        if (grounded && speedInput != 0f)
         {
             transform.rotation = Quaternion.Euler(
                 transform.rotation.eulerAngles +
                 new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * (theRB.linearVelocity.magnitude / maxSpeed), 0f));
         }
+
+        Debug.Log("SpeedInput: " + speedInput);
+        Debug.Log("Velocity: " + theRB.linearVelocity.magnitude);
     }
 }
+
