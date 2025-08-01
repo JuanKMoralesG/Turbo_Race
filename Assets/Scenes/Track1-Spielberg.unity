@@ -227,16 +227,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theRB: {fileID: 620098279}
   maxSpeed: 25
-  forwardAccel: 10
-  reverseAccel: 4
-  turnStrength: 180
+  forwardAccel: 8
+  reverseAccel: 5
+  turnStrength: 160
   groundRayPoint: {fileID: 914337009}
   groundRayPoint2: {fileID: 2009615508}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
   groundRayLength: 0.75
-  gravityMod: 40
+  gravityMod: 30
   leftFrontWheel: {fileID: 779214869}
   rightFrontWheel: {fileID: 779214867}
   maxWheelTurn: 25
@@ -459,9 +459,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 620098278}
   serializedVersion: 4
-  m_Mass: 80
-  m_Drag: 0.4
-  m_AngularDrag: 0.05
+  m_Mass: 70
+  m_Drag: 3
+  m_AngularDrag: 4
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -477,7 +477,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!135 &620098280
 SphereCollider:
   m_ObjectHideFlags: 0
