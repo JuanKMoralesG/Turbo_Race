@@ -102,7 +102,8 @@ public class CarController : MonoBehaviour
         if (grounded)
         {
             theRB.linearDamping = dragOnGround;
-            theRB.AddForce(transform.right * speedInput * 1000f);
+            theRB.AddForce(transform.right * speedInput * 1000f);   //LINEA QUE ESTA ANTES
+            //theRB.AddForce(transform.forward * speedInput * 1000f);    //ESTO ES PARA PROBAR PARA VER SI CORRIGO LO DE MI CAMARA
         }
         else
         {
