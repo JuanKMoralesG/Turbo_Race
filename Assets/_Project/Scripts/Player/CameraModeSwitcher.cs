@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Permite cambiar entre diferentes cámaras del juego
-/// Al presionar la tecla " " , se alterna la cámara activa.
+/// Al presionar la tecla "Barra Espaciadora" , se alterna la cámara activa.
 /// </summary>
 
 
