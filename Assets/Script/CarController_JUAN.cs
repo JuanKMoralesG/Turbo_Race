@@ -17,7 +17,7 @@ public class CarController_JUAN : MonoBehaviour
     public float downforceFactor = 50f;
 
     // Esta variable almacenar la velocidad simulada actual del carro
-    private float currentSimulatedSpeed = 0f;
+    public float currentSimulatedSpeed = 0f;
 
     void Start()
     {

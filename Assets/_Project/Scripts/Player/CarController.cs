@@ -51,8 +51,8 @@ public class CarController : MonoBehaviour
         // Entrada de giro izquierda/derecha (A/D o ←/→)
         turnInput = Input.GetAxis("Horizontal");
 
-        Debug.Log("Vertical: " + verticalInput);
-        Debug.Log("Horizontal: " + turnInput);
+        //Debug.Log("Vertical: " + verticalInput); //Juan Apaga esto un momento para probar la velocidad
+        //Debug.Log("Horizontal: " + turnInput);
 
         // Rotación visual de ruedas delanteras
         if (leftFrontWheel != null)
@@ -128,7 +128,16 @@ public class CarController : MonoBehaviour
                 new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * (theRB.linearVelocity.magnitude / maxSpeed), 0f));
         }
 
-        Debug.Log("SpeedInput: " + speedInput);
-        Debug.Log("Velocity: " + theRB.linearVelocity.magnitude);
+        //Agregado por Juan para verificar funcionamiento del tacometro
+        // --- VERIFICACIÓN DE VELOCIDAD REAL DEL CARRO ---
+        // Obtiene la magnitud de la velocidad lineal del Rigidbody (en metros/segundo)
+        float velocidadActualMS = theRB.linearVelocity.magnitude;
+        // Convierte metros/segundo a kilómetros/hora
+        float velocidadActualKmH = velocidadActualMS * 3.6f;
+        // Muestra la velocidad en la consola, sin decimales
+        Debug.Log("Velocidad del carro: " + velocidadActualKmH.ToString("F0") + " km/h");
+
+        //Debug.Log("SpeedInput: " + speedInput);
+        //Debug.Log("Velocity: " + theRB.linearVelocity.magnitude);
     }
 }
