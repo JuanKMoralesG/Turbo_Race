@@ -148,7 +148,8 @@ public class CarController : MonoBehaviour
     /// <summary>
     /// cuando el vehículo atraviesa un checkpoint.
     /// /// </summary>
-
+    
+    // --- CHECKPOINT / LAP SYSTEM ---
     //CHECK POINT -METODO PARA DETECTAR CUANDO EL AUTO PASA POR UN CHECKPOINT
     public void CheckpointHit(int cpNumber)
     {
@@ -160,6 +161,7 @@ public class CarController : MonoBehaviour
             {
                 nextCheckpoint = 0;
                 currentLap++;
+                
                 Debug.Log("¡Nueva vuelta! Vuelta actual: " + currentLap);
             }
         }
