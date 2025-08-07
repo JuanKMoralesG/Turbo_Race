@@ -38,6 +38,13 @@ public class CarController : MonoBehaviour
     {
         theRB.transform.parent = null;       //Separamos el Rigidbody del padre para que rote           // Separamos el Rigidbody del padre para que rote libremente
         dragOnGround = theRB.linearDamping;          // Guardamos el valor de fricción original
+
+        //iniciar la vuelta en 1
+        currentLap = 1;
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.UpdateLapCounter(currentLap);
+        }
     }
 
     void Update()
@@ -155,14 +162,21 @@ public class CarController : MonoBehaviour
     {
         if (cpNumber == nextCheckpoint)
         {
+            
             nextCheckpoint++;
 
             if (nextCheckpoint == LapManager.instance.allCheckpoints.Length)
             {
                 nextCheckpoint = 0;
                 currentLap++;
-                
+
                 Debug.Log("¡Nueva vuelta! Vuelta actual: " + currentLap);
+
+                //ui
+                if (UIManager.instance != null)
+                {
+                    UIManager.instance.UpdateLapCounter(currentLap);
+                }
             }
         }
     }
