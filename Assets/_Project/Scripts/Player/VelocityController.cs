@@ -6,30 +6,30 @@ public class VelocityController : MonoBehaviour
     public Image imgTacometro;
     public CarController carController;
 
-    // La velocidad máxima que el tacómetro debe mostrar (ej. 300 km/h).
+    // La velocidad mï¿½xima que el tacï¿½metro debe mostrar (ej. 300 km/h).
     public float maxTachometerSpeed = 300f;
 
-    // Esta variable será privada y se calculará automáticamente.
+    // Esta variable serï¿½ privada y se calcularï¿½ automï¿½ticamente.
     private float maxSpeedForNeedle_kmh;
 
-    // Rango de rotación de la aguja (ajusta estos valores en el Inspector).
-    public float minAngle = 180f; // Ángulo de la aguja para 0 km/h
-    public float maxAngle = -180f; // Ángulo de la aguja para la velocidad máxima del tacómetro
+    // Rango de rotaciï¿½n de la aguja (ajusta estos valores en el Inspector).
+    public float minAngle = 180f; // ï¿½ngulo de la aguja para 0 km/h
+    public float maxAngle = -180f; // ï¿½ngulo de la aguja para la velocidad mï¿½xima del tacï¿½metro
 
     void Start()
     {
         // 1. Revisa que la referencia al CarController no sea nula.
         if (carController == null)
         {
-            Debug.LogError("El CarController no está asignado. La aguja no funcionará.");
+            Debug.LogError("El CarController no estï¿½ asignado. La aguja no funcionarï¿½.");
             return;
         }
 
         // 2. Convierte el valor de maxSpeed del CarController (m/s) a km/h.
-        // Esto es la velocidad máxima del coche, que será también el tope de la aguja.
+        // Esto es la velocidad mï¿½xima del coche, que serï¿½ tambiï¿½n el tope de la aguja.
         maxSpeedForNeedle_kmh = carController.maxSpeed * 3.6f;
 
-        Debug.Log("La velocidad máxima para la aguja es: " + maxSpeedForNeedle_kmh + " km/h");
+        Debug.Log("La velocidad mï¿½xima para la aguja es: " + maxSpeedForNeedle_kmh + " km/h");
     }
 
     void Update()
@@ -40,6 +40,7 @@ public class VelocityController : MonoBehaviour
         }
 
         // 1. Obtiene la velocidad real del coche en m/s.
+        //float currentRealSpeed_ms = carController.theRB.linearVelocity.magnitude;
         float currentRealSpeed_ms = carController.theRB.linearVelocity.magnitude;
 
         // 2. Convierte la velocidad a km/h.
@@ -48,11 +49,11 @@ public class VelocityController : MonoBehaviour
         // 3. Limita la velocidad que usaremos para la aguja usando la variable privada.
         float clampedSpeedForNeedle = Mathf.Clamp(currentRealSpeed_kmh, 0f, maxSpeedForNeedle_kmh);
 
-        // 4. Mapea la velocidad limitada al rango de ángulos de la aguja.
-        // Usamos la velocidad máxima del tacómetro para calcular el porcentaje.
+        // 4. Mapea la velocidad limitada al rango de ï¿½ngulos de la aguja.
+        // Usamos la velocidad mï¿½xima del tacï¿½metro para calcular el porcentaje.
         float mappedAngle = Mathf.Lerp(minAngle, maxAngle, clampedSpeedForNeedle / maxTachometerSpeed);
 
-        // 5. Aplica la rotación a la aguja.
+        // 5. Aplica la rotaciï¿½n a la aguja.
         imgTacometro.rectTransform.localEulerAngles = new Vector3(0, 0, mappedAngle);
     }
 }

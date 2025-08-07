@@ -30,10 +30,14 @@ public class CarController : MonoBehaviour
     public Transform leftFrontWheel, rightFrontWheel; // Ruedas delanteras para rotación visual
     public float maxWheelTurn = 25f;                  // Ángulo visual máximo de giro de ruedas
 
+    //--CHECK POINT Y VUELTAS
+    public int nextCheckpoint;
+    public int currentLap;
+
     void Start()
     {
-        theRB.transform.parent = null;                 // Separamos el Rigidbody del padre para que rote libremente
-        dragOnGround = theRB.linearDamping;            // Guardamos el valor de fricción original
+        theRB.transform.parent = null;       //Separamos el Rigidbody del padre para que rote           // Separamos el Rigidbody del padre para que rote libremente
+        dragOnGround = theRB.linearDamping;          // Guardamos el valor de fricción original
     }
 
     void Update()
@@ -107,7 +111,7 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            theRB.linearDamping = 0.1f;
+            theRB.linearDamping = dragOnGround;
             theRB.AddForce(-Vector3.up * gravityMod * 100f);
         }
 
@@ -139,5 +143,25 @@ public class CarController : MonoBehaviour
 
         //Debug.Log("SpeedInput: " + speedInput);
         //Debug.Log("Velocity: " + theRB.linearVelocity.magnitude);
+    }
+
+    /// <summary>
+    /// cuando el vehículo atraviesa un checkpoint.
+    /// /// </summary>
+
+    //CHECK POINT -METODO PARA DETECTAR CUANDO EL AUTO PASA POR UN CHECKPOINT
+    public void CheckpointHit(int cpNumber)
+    {
+        if (cpNumber == nextCheckpoint)
+        {
+            nextCheckpoint++;
+
+            if (nextCheckpoint == LapManager.instance.allCheckpoints.Length)
+            {
+                nextCheckpoint = 0;
+                currentLap++;
+                Debug.Log("¡Nueva vuelta! Vuelta actual: " + currentLap);
+            }
+        }
     }
 }
