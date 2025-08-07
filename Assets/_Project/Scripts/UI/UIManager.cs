@@ -12,25 +12,43 @@ public class UIManager : MonoBehaviour
     [Header("Parámetros de la carrera")]
     public int totalLaps = 3;
 
+    private float raceTime;
+    private bool raceOngoing;
+
     private void Awake()
     {
         instance = this;
     }
 
+    void Start()
+    {
+        raceTime = 0f;
+        raceOngoing = true; // Empieza la carrera desde el principio
+    }
+
     void Update()
     {
-        UpdateLapTimeDisplay();
+        if (raceOngoing)
+        {
+            raceTime += Time.deltaTime;
+            UpdateLapTimeDisplay(raceTime);
+        }
     }
 
     public void UpdateLapCounter(int currentLap)
     {
         lapCounterText.text = currentLap + "/" + totalLaps;
+
+        // Si terminó la carrera, detenemos el conteo
+        if (currentLap > totalLaps)
+        {
+            raceOngoing = false;
+        }
     }
 
-    private void UpdateLapTimeDisplay()
+    private void UpdateLapTimeDisplay(float time)
     {
-        float currentLapTime = Time.timeSinceLevelLoad;  // Esto lo reemplazaremos después con un tiempo real de vuelta
-        currentLapTimeText.text = FormatTime(currentLapTime);
+        currentLapTimeText.text = FormatTime(time);
     }
 
     private string FormatTime(float time)
@@ -39,5 +57,10 @@ public class UIManager : MonoBehaviour
         int seconds = Mathf.FloorToInt(time % 60);
         int milliseconds = Mathf.FloorToInt((time * 1000) % 1000);
         return string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliseconds);
+    }
+
+    public float GetRaceTime()
+    {
+        return raceTime;
     }
 }

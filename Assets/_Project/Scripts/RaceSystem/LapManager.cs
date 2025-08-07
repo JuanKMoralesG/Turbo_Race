@@ -10,6 +10,8 @@ public class LapManager : MonoBehaviour
 
     public RaceCheckpoint[] allCheckpoints;
 
+    
+
 
     private void Awake()
     {
